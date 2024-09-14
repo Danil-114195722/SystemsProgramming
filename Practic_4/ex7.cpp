@@ -7,16 +7,22 @@ void printArr(int arr[SIZE]) {
 	for(unsigned i = 0; i < SIZE; ++i) {
 		std::cout << arr[i] << " ";
 	}
-	std::cout << "]" << std::endl;;
+	std::cout << "]" << std::endl;
 }
 
 
 int main() {
-	int arr[SIZE] = {1, 2, 3, 4, 5};
-	int* tempArr = new int[SIZE];
-
+	int* arr = new int[SIZE];
+	int num;
+	for(unsigned i = 0; i < SIZE; ++i) {
+		std::cout << "Enter the number [left " << SIZE - i << "]: ";
+		std::cin >> num;
+		arr[i] = num;
+	}
 	printArr(arr);
 
+
+	int* tempArr = new int[SIZE];
 	for(unsigned i = 0; i < SIZE; ++i) {
 		tempArr[i] = arr[SIZE-1-i];
 	}
@@ -25,6 +31,7 @@ int main() {
 	}
 	delete[] tempArr;
 
+	std::cout << "reversed ";
 	printArr(arr);
 
 	return 0;
