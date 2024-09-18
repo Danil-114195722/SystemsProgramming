@@ -1,4 +1,8 @@
 Makefile
+
 app
 test
+
+*.o
+
 main.cpp
