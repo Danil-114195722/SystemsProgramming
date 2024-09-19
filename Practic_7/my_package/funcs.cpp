@@ -1,3 +1,6 @@
+#include <iostream>
+#include <stdlib.h>
+
 #include "funcs.h"
 
 
@@ -22,6 +25,11 @@ int countOdd(int* arr, int size) {
 }
 
 
-int sumArrNum(int num, int* arr) {
+int sumArrNum(unsigned num, int* arr, int size) {
+	if(num > size-1) {
+		std::cout << "Error: num value not in array size range" << std::endl;
+		exit(5);
+	}
+
 	return num + arr[num];
 }

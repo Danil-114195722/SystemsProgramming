@@ -6,4 +6,4 @@ double multiplyOrAdd(double num1, double num2, bool add = true);
 int countOdd(int* arr, int size);
 
 // ex5
-int sumArrNum(int num, int* arr);
+int sumArrNum(unsigned num, int* arr, int size);
