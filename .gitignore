@@ -1,8 +1,11 @@
+# cmake temp files
 Makefile
+cmake/
 
+# execute files
 app
 test
+main
 
+# object files
 *.o
-
-main.cpp
