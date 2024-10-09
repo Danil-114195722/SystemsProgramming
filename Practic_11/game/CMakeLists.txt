@@ -10,10 +10,14 @@ project(game VERSION 1.0 LANGUAGES CXX)
 set(SOURCE_EXE main.cpp)
 
 # Установка переменной со списком исходников для библиотеки
-set(SOURCE_LIB ./main_vars/main_vars.cpp
-	./printing/printing.cpp
-	./services/services.cpp
+set(SOURCE_LIB
+	./main_vars/main_vars.cpp
+	./main_vars/printing.cpp
+	
 	./calls/calls.cpp
+	./calls/printing.cpp
+	
+	./services/services.cpp
 )
 
 # Создает исполняемый файл с именем app

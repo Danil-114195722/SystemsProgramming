@@ -1,7 +1,11 @@
 #include <iostream>
-#include "./printing/printing.h"
-#include "./services/services.h"
+
 #include "./calls/calls.h"
+#include "./calls/printing.h"
+
+#include "./main_vars/main_vars.h"
+#include "./main_vars/printing.h"
+
 
 using namespace std;
 
@@ -11,8 +15,6 @@ int main() {
 
 	PrintState();
 
-	cout << "Rand: " << Randint(1, 5) << endl;
-
 	Call newCall;
 	GetRandomCall(&newCall);
 
@@ -20,6 +22,11 @@ int main() {
 	PrintShortCall(newCall);
 	cout << endl;
 	PrintFullCall(newCall);
+
+	bool res = PerformCall(newCall);
+
+	cout << "\nPerformed: " << boolalpha << res << endl;
+	PrintState();
 
 	return 0;
 }

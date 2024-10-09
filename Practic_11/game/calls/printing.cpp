@@ -1,38 +1,10 @@
 #include <iostream>
-#include "../main_vars/main_vars.h"
-#include "../calls/calls.h"
+#include "./printing.h"
+
+#include "./calls.h"
 
 using namespace std;
 
-
-// печать символа N раз
-void PrintNTimes(char symbol, int n) {
-    for (int i=0; i<n; i++) {
-        cout << symbol;
-    }
-}
-
-// печать сердечек здоровья героя
-void PrintHealth() {
-    for (int i=0; i<health; i++) {
-        cout << "♥";
-    }
-    for (int i=0; i<(maxHealth-health); i++) {
-        cout << "♡";
-    }
-}
-
-// печать состояния героя
-void PrintState() {
-    cout << "Возраст: " << age;
-    cout << " | Заслуга: " << score;
-    cout << " | Кэш: " << cash;
-    PrintNTimes(' ', 20);
-    cout << "Боекомплект: " << amunition;
-    cout << " | Здоровье: ";
-    PrintHealth();
-    cout << endl;
-}
 
 // краткая печать вызова
 void PrintShortCall(Call callStruct) {
