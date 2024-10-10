@@ -1,8 +1,11 @@
 #include <iostream>
-// #include <cstdlib>
+#include <unistd.h>
 
 #include "../calls/calls.h"
 #include "../calls/printing.h"
+
+#include "../hospital/hospital.h"
+#include "../office/office.h"
 
 #include "../main_vars/main_vars.h"
 #include "../main_vars/printing.h"
@@ -13,8 +16,63 @@ using namespace std;
 
 // печать приглашения игры и её краткого описания
 void DisplayIntro() {
-	cout << "Игра \"Ментолятор\" (cимулятор мента)" << endl;
+	cout << "+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+" << endl;
+	cout << "| Текстовая игра \"Ментолятор\" |" << endl;
+	cout << "+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+" << endl << endl;
+	cout << "Игра \"Ментолятор\" - это cимулятор мента.";
+	cout << "\nНачав играть в Ментолятор, ты почуствуешь себя крутым ментом.";
+	cout << "\nВ этой игре присутствуют мощные боёвки в сочетании с интереcной механикой здоровья, боекомплекта и выносливости!";
+	cout << "\n\nТебя ждут вызовы, на которых придётся испытать удачу в победе над нарушителями закона.";
+	cout << "\nВ игре предусмотрены различные локации вызовов с различным уровнем опасности.";
+	cout << "\nЗа выполнение вызовов ты будешь получать кэш, необходимый для восстановления героя, и";
+	cout << "\nочки заслуги, которые будут непосредственно влиять на твою пенсию.";
+	cout << "\n\nОсновная задача игры - дослужить до пенсии и получить достаточное количество очков заслуги, чтобы";
+	cout << "\nпрожить оставшиеся годы легко и с удовольствием.";
+	cout << "\n\nИ помни, ты играешь за КРУТОГО мента, который в этом деле уже как 5 лет!";
+	cout << "\nПоэтому вызовы будут непростые, а дожить до пенсии (которая начинается в " << pensionAge << " лет) будет ещё сложнее.";
+	cout << endl << endl << endl;
+
+	// подтверждение начала игры
+	char* complete = new char;
+	cout << "Итак, начать игру? [y, n] ";
+	cin >> *complete;
+
+	if (*complete != 'y') {
+		gameOver = true;
+	}
+	delete complete;
+}
+
+
+// печать пенсии игрока в зависимости от его очков заслуги
+void DisplayPensionEnd() {
+	PrintState();
 	cout << endl;
+
+	cout << "Ты дослужился до пенсии!!!" << endl << endl;
+	sleep(2);
+
+	// среднее кол-во заслуги, которое возможно получить от 30 лет до пенсии
+	int* avgScore = new int;
+	*avgScore = int(((pensionAge - 30.0) / 5.0) * 300.0);
+
+	int* percentScoreFloating = new int;
+	*percentScoreFloating = int(float(*avgScore) * 0.15);
+
+	if (score-300 < *avgScore-*percentScoreFloating) {
+		cout << "Во время службы ты часто бездельничал, поэтому теперь ты";
+		cout << "\nстал бомжом и побираешься на помойках :(" << endl;
+	} else if (score-300 > *avgScore+*percentScoreFloating) {
+		cout << "Почти всё время службы ты проводил на вызовах и пахал как конь,\nпоэтому теперь ты ";
+		cout << "получаешь огромную пенсию и живёшь на Фиджи :D" << endl;
+	} else {
+		cout << "Ты хорошо служил, выполнял вызовы, когда это было необходимо, и";
+		cout << "\nответственно подходил к своей работе, поэтому теперь ты";
+		cout << "\nполучаешь неплохую пенсию и активно проводишь оставшиеся годы жизни :)" << endl;
+	}
+
+	delete avgScore;
+	delete percentScoreFloating;
 }
 
 
@@ -44,16 +102,13 @@ void CurrentLocation(Call* callList, int selectedCallIdx) {
 		cout << "\nДоступные действия:" << endl;
 
 		int* lastActionIdx = new int;
-		*lastActionIdx = 1;
-		for (int i = 0; i < 9; ++i) {
-			// проверка на наличие вызова на этом месте в массиве
-			if (callList[i].isOccupied) {
-				cout << i+1 << ". ";
-				PrintShortCall(callList[i]);
-				(*lastActionIdx)++;
-			}
+		*lastActionIdx = ActiveCallsCount(callList);
+
+		for (int i = 0; i < *lastActionIdx; ++i) {
+			cout << i+1 << ". ";
+			PrintShortCall(callList[i]);
 		}
-		cout << *lastActionIdx << ". Вернуться на рабочее место [q]" << endl;
+		cout << *lastActionIdx+1 << ". Вернуться на рабочее место [q]" << endl;
 
 		delete lastActionIdx;
 
@@ -93,7 +148,7 @@ void CurrentLocation(Call* callList, int selectedCallIdx) {
 
 // переход в другую локацию или совершение действия
 // возвращает номер выбранного вызова
-int MakeAction(Call* callList) {
+int MakeAction(Call* callList, int selectedCallIdx) {
 	// считывание действия от юзера
 	char action;
 	cout << "Введите действие: ";
@@ -111,11 +166,15 @@ int MakeAction(Call* callList) {
 			case 's':
 				cout << "Переход в: офис - склад оружия и боеприпасов...\n" << endl;
 				location = "officeStorage";
+				// затраченное время на действие
+				age += 0.1;
 				break;
 			// переход в больницу
 			case 'h':
 				cout << "Переход в: больница...\n" << endl;
 				location = "hospital";
+				// затраченное время на действие
+				age += 0.2;
 				break;
 			// если было введено что-то другое
 			default:
@@ -125,23 +184,33 @@ int MakeAction(Call* callList) {
 
 	// офис - склад оружия и боеприпасов
 	} else if (location == "officeStorage") {
+		// будет хранить true, если боекомплект не полон и пополнится
+		bool* wasFill = new bool;
+
 		switch (action) {
 			// пополнение боекомплекта и возвращение обратно, в офис
 			case 'a':
 				cout << "Пополнение боекомплекта...\n" << endl;
-
-				// TODO: функция из пакета office для пополнения боекомплекта
-
-				cout << "+ Боекомплект успешно пополнен!";
+				*wasFill = FillAmmunition();
 				cout << "Переход в: офис...\n" << endl;
 
 				location = "office";
+				// затраченное время на действие
+				if (*wasFill) {
+					age += 0.2;
+				} else {
+					age += 0.1;
+				}
+
+				delete wasFill;
 				break;
 
 			// переход назад, в офис
 			case 'q':
 				cout << "Переход в: офис...\n" << endl;
 				location = "office";
+				// затраченное время на действие
+				age += 0.1;
 				break;
 
 			// если было введено что-то другое
@@ -180,21 +249,35 @@ int MakeAction(Call* callList) {
 	// офис - описание вызова
 	} else if (location == "officeCallDesc") {
 		switch (action) {
+			// будет содержать успех/неудачу выполнения вызова	
+			bool ok;
+
 			// принятие вызова
 			case 'y':
-				cout << "Принятие вызова...\n" << endl;
+				cout << "Принятие вызова..." << endl;
+				sleep(1);
+				cout << "Выезд на место преступления..." << endl;
+				sleep(1);
+				cout << "Прибытие на место преступления!" << endl;
 
-				// TODO: поездка на место вызова
-				// TODO: функция из пакета office для выполнения вызова
-				cout << "БУДЕТ ВЫПОЛНЕНИЕ ВЫЗОВА" << endl;
+				// выполнения вызова
+				ok = PerformCall(callList[selectedCallIdx]);
 
 				// если успех, то возвращение обратно, в офис
+				if (ok) {
+					// пересортировка массива с вызовами (удаление из массива выполненного вызова)
+					RecollectCallList(callList, selectedCallIdx);
+					// создание новых вызовов
+					CreateCalls(callList);
+
+					sleep(1);
+					cout << "\nПереход в: офис...\n" << endl;
+					location = "office";
 				// если неудача, то заканчиваем игру
-
-				// TODO: поездка назад в офис
-				cout << "Переход в: офис...\n" << endl;
-
-				location = "office";
+				} else {
+					cout << "\nВы погибли при исполнении. Игра окончена. .  .    .       ." << endl << endl;
+					gameOver = true;
+				}
 				break;
 
 			// переход назад к списку вызовов
@@ -215,6 +298,8 @@ int MakeAction(Call* callList) {
 		if (action == 'o') {
 			cout << "Переход в: офис...\n" << endl;
 			location = "office";
+			// затраченное время на действие
+			age += 0.2;
 		} else {
 			// преобразование строки в число
 			int* chosenTreatment = new int;
@@ -222,15 +307,19 @@ int MakeAction(Call* callList) {
 
 			// если был введён номер лечения (какое кол-во сердечек восстановить)
 			if (*chosenTreatment > 0 && *chosenTreatment <= maxHealth-health) {
-				
-				// TODO: функция из пакета hospital для выполнения лечения
-				cout << "Лечение ";
-				for (int i = 0; i < *chosenTreatment; ++i) {
-					cout << "♥";
+				bool ok = Heal(*chosenTreatment);
+				if (ok) {
+					cout << "Лечение выполнено успешно! Восстановлено ";
+					for (int i = 0; i < *chosenTreatment; ++i) {
+						cout << "♥";
+					}
+					cout << endl << endl;
+				} else {
+					cout << "Лечение не выполнено. Недостаточно кэша!\n" << endl;
 				}
-				cout << endl;
+				// затраченное время на действие
+				age += 0.1 * (*chosenTreatment);
 
-				cout << "Лечение успешно!" << endl;
 			// если было введено что-то другое
 			} else {
 				cout << "Введено неверное действие! Изменений не произошло.\n" << endl;

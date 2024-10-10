@@ -1,0 +1,1 @@
+bool Heal(int heartAmount);

@@ -5,16 +5,17 @@ using namespace std;
 
 const int maxHealth = 5;
 const int minHealth = 0;
-const float pensionAge = 40.0;
+const int maxAmmunition = 21;
+const float pensionAge = 35.0;
+// const float pensionAge = 50.0;
 
-float age = 35.0;
-int ammunition = 14;
-int health = maxHealth-2;
+float age = 30.0;
+int ammunition = 21;
+int health = maxHealth;
 int cash = 0;
-int score = 0;
+int score = 300;
 
 string location = "office";
-// string location = "hospital";
 bool gameOver = false;
 
-int oneHeartPrice = 30;
+int oneHeartPrice = 20;

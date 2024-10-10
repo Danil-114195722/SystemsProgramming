@@ -99,6 +99,8 @@ string GetCallDesc(int placeIdx, int peopleDanger, int people) {
 
 // получение случайного вызова
 void GetRandomCall(Call* emptyCall) {
+    sleep(1);
+
     // получение случайного id для случайного места
     int* randPlaceIdx = new int;
     *randPlaceIdx = Randint(0, 9);
@@ -165,12 +167,10 @@ bool PerformCall(Call callStruct) {
     // эмуляция борьбы с нарушителями
     int* randPatronsForPeople = new int;
     for (int i = 0; i < callStruct.people; ++i) {
-        *randPatronsForPeople = Randint(1, 100);
-        sleep(1);
-
-        cout << "Нарушитель " << i+1 << " (осталось патронов: " << ammunition << " | здоровье: ";
+        cout << "Осталось нарушителей: " << callStruct.people - i << " (осталось патронов: " << ammunition << " | здоровье: ";
         PrintHealth();
         cout << ")" << endl;
+        sleep(1);
 
         // если закончились патроны, то отнимаем сердечко
         if (ammunition <= 0) {
@@ -179,6 +179,20 @@ bool PerformCall(Call callStruct) {
             cout << "-♥" << endl;
             health--;
         } else {
+            // 100% выпадает 1 патрон
+            if (ammunition == 1) {
+                *randPatronsForPeople = 1;
+            // рандомно выпадает от 1 до 2 патронов
+            } else if (ammunition == 2) {
+                *randPatronsForPeople = Randint(1, 70);
+            // рандомно выпадает от 1 до 3 патронов
+            } else if (ammunition == 3) {
+                *randPatronsForPeople = Randint(1, 90);
+            // рандомно выпадает от 1 до 4 патронов
+            } else {
+                *randPatronsForPeople = Randint(1, 100);
+            }
+
             // затрачивается 1 патрон (30%)
             if (*randPatronsForPeople <= 30) {
                 cout << "-1 патрон" << endl;
@@ -187,10 +201,10 @@ bool PerformCall(Call callStruct) {
             } else if (*randPatronsForPeople <= 70) {
                 cout << "-2 патрона" << endl;
                 ammunition -= 2;
-            // затрачивается 3 патрона (20%) и может потратиться 1 сердечко (10%)
+            // затрачивается 3 патрона (20%) и может потратиться 1 сердечко (20%)
             } else if (*randPatronsForPeople <= 90) {
                 cout << "-3 патрона" << endl;
-                if (Randint(1, 100) > 90) {
+                if (Randint(1, 100) > 80) {
                     cout << "-♥" << endl;
                     health--;
                 }
@@ -210,16 +224,16 @@ bool PerformCall(Call callStruct) {
             PrintHealth();
             cout << ")" << endl;
 
-            sleep(1);
+            sleep(3);
             health = minHealth;
             return false;
         }
     }
     delete randPatronsForPeople;
-    cout << "Все нарушители устранены (осталось патронов: " << ammunition << " | здоровье: ";
+    cout << "Все нарушители устранены! (осталось патронов: " << ammunition << " | здоровье: ";
     PrintHealth();
     cout << ")" << endl;
-    sleep(2);
+    sleep(3);
 
     age += callStruct.timeDuration;
     cash += callStruct.cash;
@@ -228,7 +242,7 @@ bool PerformCall(Call callStruct) {
     cout << "\nВызов завершён успешно!" << endl;
     cout << "+ Полученный кэш: " << callStruct.cash << endl;
     cout << "+ Полученный счёт заслуги: " << callStruct.score << endl;
-    cout << "+ Затраченно времени на вызов: " << callStruct.timeDuration << endl;
+    cout << "+ Затраченно времени на вызов: " << callStruct.timeDuration << endl << endl;
 
     return true;
 }

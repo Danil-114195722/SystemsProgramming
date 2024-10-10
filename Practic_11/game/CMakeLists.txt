@@ -18,6 +18,8 @@ set(SOURCE_LIB
 	./calls/printing.cpp
 	
 	./location/location.cpp
+	./hospital/hospital.cpp
+	./office/office.cpp
 
 	./services/services.cpp
 )

@@ -5,6 +5,7 @@ using namespace std;
 
 extern const int maxHealth;
 extern const int minHealth;
+extern const int maxAmmunition;
 extern const float pensionAge;
 
 extern float age;
