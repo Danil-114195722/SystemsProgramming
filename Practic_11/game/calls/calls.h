@@ -3,6 +3,7 @@ using namespace std;
 
 // структура с информацией о вызове
 struct Call {
+    bool isOccupied; // флаг занятости ячейки (для массива вызовов)
     string place; // место
     string desc; // описание
     int people; // кол-во человек
@@ -16,3 +17,5 @@ struct Call {
 void GetRandomCall(Call* emptyCall);
 
 bool PerformCall(struct Call callStruct);
+
+void RecollectCallList(Call* callList, int selectedCallIdx);

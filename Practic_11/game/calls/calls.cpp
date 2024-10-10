@@ -2,6 +2,7 @@
 #include <cmath>
 #include <unistd.h>
 #include "./calls.h"
+#include "./printing.h"
 
 #include "../main_vars/main_vars.h"
 #include "../main_vars/printing.h"
@@ -134,6 +135,7 @@ void GetRandomCall(Call* emptyCall) {
     float* callTimeDuration = new float;
     *callTimeDuration = *callDanger / 10.0;
 
+    (*emptyCall).isOccupied = true;
     (*emptyCall).place = *randPlace;
     (*emptyCall).desc = *callDesc;
     (*emptyCall).people = *randPeople;
@@ -166,7 +168,7 @@ bool PerformCall(Call callStruct) {
         *randPatronsForPeople = Randint(1, 100);
         sleep(1);
 
-        cout << "Нарушитель " << i << " (осталось патронов: " << ammunition << " | здоровье: ";
+        cout << "Нарушитель " << i+1 << " (осталось патронов: " << ammunition << " | здоровье: ";
         PrintHealth();
         cout << ")" << endl;
 
@@ -229,4 +231,19 @@ bool PerformCall(Call callStruct) {
     cout << "+ Затраченно времени на вызов: " << callStruct.timeDuration << endl;
 
     return true;
+}
+
+
+// передвинуть элементы массива вызовов (например, если есть 5 вызовов, и юзер выполнил 3й)
+void RecollectCallList(Call* callList, int selectedCallIdx) {
+    // помечаем вызов завершённым
+    callList[selectedCallIdx].isOccupied = false;
+
+    for (int i = 1; i < 9; ++i) {
+        // проверка на наличие вызова на предыдущем месте в массиве
+        if (!(callList[i-1].isOccupied)) {
+            callList[i-1] = callList[i];
+            callList[i].isOccupied = false;
+        }
+    }
 }

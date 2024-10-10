@@ -17,6 +17,8 @@ set(SOURCE_LIB
 	./calls/calls.cpp
 	./calls/printing.cpp
 	
+	./location/location.cpp
+
 	./services/services.cpp
 )
 

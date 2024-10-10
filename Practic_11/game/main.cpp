@@ -1,32 +1,67 @@
 #include <iostream>
+#include <unistd.h>
 
 #include "./calls/calls.h"
-#include "./calls/printing.h"
+// #include "./calls/printing.h"
 
-#include "./main_vars/main_vars.h"
-#include "./main_vars/printing.h"
+// #include "./main_vars/main_vars.h"
+// #include "./main_vars/printing.h"
 
+#include "./location/location.h"
 
 using namespace std;
 
 
 int main() {
-	cout << "Игра \"Ментолятор\" (cимулятор мента)" << endl;
+	// вывод приглашения игры и её краткого описания
+	DisplayIntro();
 
-	PrintState();
+	// получение нескольких вызовов
+	sleep(1);
+	Call newCall1;
+	GetRandomCall(&newCall1);
+	sleep(1);
+	Call newCall2;
+	GetRandomCall(&newCall2);
+	sleep(1);
+	Call newCall3;
+	GetRandomCall(&newCall3);
 
-	Call newCall;
-	GetRandomCall(&newCall);
+	// список для вызовов
+	struct Call callList[9] = {newCall1, newCall2, newCall3};
+	// заполнение оставшихся элементов массива пустыми вызовами
+	Call emptyCall;
+	emptyCall.isOccupied = false;
+	for (int i = 3; i < 9; ++i) {
+		callList[i] = emptyCall;
+	}
 
-	cout << endl;
-	PrintShortCall(newCall);
-	cout << endl;
-	PrintFullCall(newCall);
+	// индекс выбранного вызова
+	int chosenCallIdx = 0;
+	while(true) {
+		// печать текущей локации и доступных действий
+		CurrentLocation(callList, chosenCallIdx);
 
-	bool res = PerformCall(newCall);
+		// запрос действия в соответствии с локацией и выполнения действия
+		chosenCallIdx = MakeAction(callList);
+		sleep(1);
+	}
 
-	cout << "\nPerformed: " << boolalpha << res << endl;
-	PrintState();
+	// // чистка массива вызовов от выполненного вызова
+	// RecollectCallList(callList, 1);
+
+	// // печать текущей локации и доступных действий
+	// CurrentLocation(callList, 0);
+
+	// cout << endl;
+	// PrintShortCall(newCall);
+	// cout << endl;
+	// PrintFullCall(newCall);
+
+	// bool res = PerformCall(newCall);
+
+	// cout << "\nPerformed: " << boolalpha << res << endl;
+	// PrintState();
 
 	return 0;
 }
