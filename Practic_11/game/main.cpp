@@ -11,13 +11,13 @@ using namespace std;
 
 int main() {
 	// вывод приглашения игры и её краткого описания
-	// DisplayIntro();
-	// if (gameOver) {
-	// 	cout << "Хорошо, приходи в другой раз" << endl;
-	// 	return 0;
-	// } else {
-	// 	cout << "Начинаем..." << endl << endl;
-	// }
+	DisplayIntro();
+	if (gameOver) {
+		cout << "Хорошо, приходи в другой раз" << endl;
+		return 0;
+	} else {
+		cout << "Начинаем..." << endl << endl;
+	}
 
 	// список для вызовов
 	struct Call callList[9];
@@ -29,8 +29,8 @@ int main() {
 	}
 	// получение нескольких случайных вызовов
 	GetRandomCall(&(callList[0]));
-	// GetRandomCall(&(callList[1]));
-	// GetRandomCall(&(callList[2]));
+	GetRandomCall(&(callList[1]));
+	GetRandomCall(&(callList[2]));
 
 	// список для продуктов
 	struct Product productList[3];
@@ -39,7 +39,7 @@ int main() {
 
 	// индекс выбранного вызова
 	int chosenCallIdx = 0;
-	while(age < pensionAge) {
+	while(age <= pensionAge) {
 		// печать текущей локации и доступных действий
 		CurrentLocation(callList, chosenCallIdx, productList);
 

@@ -6,6 +6,7 @@
 
 #include "../main_vars/main_vars.h"
 #include "../main_vars/printing.h"
+#include "../stamina/stamina.h"
 #include "../services/services.h"
 
 using namespace std;
@@ -131,7 +132,7 @@ void GetRandomCall(Call* emptyCall) {
 
     // расчёт денег за успешное выполнение задачи
     int* callCash = new int;
-    *callCash = (*callDanger) + Randint(10, 30);
+    *callCash = (*callDanger) + Randint(5, 25);
 
     // расчёт времени на выполнение задачи
     float* callTimeDuration = new float;
@@ -166,8 +167,12 @@ bool PerformCall(Call callStruct) {
 
     // эмуляция борьбы с нарушителями
     int* randPatronsForPeople = new int;
+    // здесь будет true, если выносливость закончится
+    int* isStaminaEmpty = new int;
+
     for (int i = 0; i < callStruct.people; ++i) {
-        cout << "Осталось нарушителей: " << callStruct.people - i << " (осталось патронов: " << ammunition << " | здоровье: ";
+        cout << "Осталось нарушителей: " << callStruct.people - i << " (осталось патронов: " << ammunition;
+        cout << " | выносливость: " << stamina << " | здоровье: ";
         PrintHealth();
         cout << ")" << endl;
         sleep(1);
@@ -220,7 +225,8 @@ bool PerformCall(Call callStruct) {
 
         // если сердечки закончились, то "game over"
         if (health <= minHealth) {
-            cout << "Здоровье закончилось (осталось патронов: " << ammunition << " | здоровье: ";
+            cout << "Здоровье закончилось (осталось патронов: " << ammunition;
+            cout << " | выносливость: " << stamina << " | здоровье: ";
             PrintHealth();
             cout << ")" << endl;
 
@@ -228,9 +234,18 @@ bool PerformCall(Call callStruct) {
             health = minHealth;
             return false;
         }
+
+        // уменьшение выносливости на 1, 2 или 3
+        *isStaminaEmpty = SpendStamina(Randint(1, 3));
+        // если выносливость на нуле
+        if (*isStaminaEmpty) {
+            RecoverStamina();
+            return false;
+        }
     }
     delete randPatronsForPeople;
-    cout << "Все нарушители устранены! (осталось патронов: " << ammunition << " | здоровье: ";
+    cout << "Все нарушители устранены! (осталось патронов: " << ammunition;
+    cout << " | выносливость: " << stamina << " | здоровье: ";
     PrintHealth();
     cout << ")" << endl;
     sleep(3);

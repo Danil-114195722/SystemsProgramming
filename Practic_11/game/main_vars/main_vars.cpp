@@ -14,8 +14,8 @@ const float pensionAge = 35.0;
 float age = 30.0;
 int ammunition = 21;
 int health = maxHealth;
-int stamina = maxStamina-50;
-int cash = 60;
+int stamina = maxStamina;
+int cash = 0;
 int score = 300;
 
 string location = "office";
