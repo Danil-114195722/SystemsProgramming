@@ -5,6 +5,7 @@
 #include "../calls/printing.h"
 
 #include "../hospital/hospital.h"
+#include "../shop/shop.h"
 #include "../office/office.h"
 
 #include "../main_vars/main_vars.h"
@@ -77,7 +78,7 @@ void DisplayPensionEnd() {
 
 
 // печать текущей локации юзера и списка доступных действий
-void CurrentLocation(Call* callList, int selectedCallIdx) {
+void CurrentLocation(Call* callList, int selectedCallIdx, Product* productList) {
 	PrintState();
 
 	// офис
@@ -88,6 +89,7 @@ void CurrentLocation(Call* callList, int selectedCallIdx) {
 		cout << "1. Посмотреть список вызовов [l]" << endl;
 		cout << "2. Сходить на склад боеприпасов [s]" << endl;
 		cout << "3. Поехать в больницу [h]" << endl;
+		cout << "4. Поехать в магазин [m]" << endl;
 
 	} else if (location == "officeStorage") {
 		cout << "\nТекущее местоположение: офис - склад оружия и боеприпасов" << endl;
@@ -141,6 +143,17 @@ void CurrentLocation(Call* callList, int selectedCallIdx) {
 		cout << *lastActionIdx << ". Поехать в офис [o]" << endl;
 
 		delete lastActionIdx;
+	
+	// магазин
+	} else if (location == "shop") {
+		cout << "\nТекущее местоположение: магазин" << endl;
+
+		cout << "Доступные действия:" << endl;
+		for (int i = 0; i < 3; ++i) {
+			cout << i+1 << ". Купить товар \"" << productList[i].title << "\" (+" << productList[i].stamina;
+			cout << " выносливости; -" << productList[i].cash << " кэша)" << endl;
+		}
+		cout << "4. Поехать в офис [o]" << endl;
 	}
 	cout << endl;
 }
@@ -148,7 +161,7 @@ void CurrentLocation(Call* callList, int selectedCallIdx) {
 
 // переход в другую локацию или совершение действия
 // возвращает номер выбранного вызова
-int MakeAction(Call* callList, int selectedCallIdx) {
+int MakeAction(Call* callList, int selectedCallIdx, Product* productList) {
 	// считывание действия от юзера
 	char action;
 	cout << "Введите действие: ";
@@ -175,6 +188,13 @@ int MakeAction(Call* callList, int selectedCallIdx) {
 				location = "hospital";
 				// затраченное время на действие
 				age += 0.2;
+				break;
+			// переход в магазин
+			case 'm':
+				cout << "Переход в: магазин...\n" << endl;
+				location = "shop";
+				// затраченное время на действие
+				age += 0.3;
 				break;
 			// если было введено что-то другое
 			default:
@@ -314,18 +334,54 @@ int MakeAction(Call* callList, int selectedCallIdx) {
 						cout << "♥";
 					}
 					cout << endl << endl;
+					// затраченное время на действие
+					age += 0.1 * (*chosenTreatment);
 				} else {
 					cout << "Лечение не выполнено. Недостаточно кэша!\n" << endl;
+					// затраченное время на действие
+					age += 0.1;
 				}
-				// затраченное время на действие
-				age += 0.1 * (*chosenTreatment);
 
 			// если было введено что-то другое
 			} else {
 				cout << "Введено неверное действие! Изменений не произошло.\n" << endl;
 			}
 
+			// TODO: уменьшение выносливости на 5
 			delete chosenTreatment;
+		}
+
+	// магазин
+	} else if (location == "shop") {
+		// переход в офис
+		if (action == 'o') {
+			cout << "Переход в: офис...\n" << endl;
+			location = "office";
+			// затраченное время на действие
+			age += 0.3;
+		} else {
+			// преобразование строки в число
+			int* chosenProduct = new int;
+			*chosenProduct = action - '0';
+
+			// если был введён номер товара
+			if (*chosenProduct > 0 && *chosenProduct <= 3) {
+				bool ok = BuyProduct(productList[*chosenProduct-1]);
+				if (ok) {
+					cout << "Продукт успешно употреблён!\n" << endl;
+					UpdateRandomProducts(productList, *chosenProduct-1, 3);
+				} else {
+					cout << "Продукт не куплен. Недостаточно кэша!\n" << endl;
+				}
+				// затраченное время на действие
+				age += 0.1;
+
+			// если было введено что-то другое
+			} else {
+				cout << "Введено неверное действие! Изменений не произошло.\n" << endl;
+			}
+
+			delete chosenProduct;
 		}
 	}
 	return 0;

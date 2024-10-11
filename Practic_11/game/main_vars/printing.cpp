@@ -54,14 +54,15 @@ void PrintState() {
     // из всех данных собираем строку, чтобы узнать её длину
     string* stateStr = new string;
     *stateStr = "| Возраст: " + *ageStr + " | Заслуга: " + to_string(score) + " | Кэш: " + to_string(cash);
-    *stateStr += StringNTimes(' ', 19) + "Боекомплект: " + to_string(ammunition) + " | Здоровье: " + StringHealth() + " |";
+    *stateStr += StringNTimes(' ', 19) + "Боекомплект: " + to_string(ammunition);
+    *stateStr += " | Выносливость: " + to_string(stamina) + " | Здоровье: " + StringHealth() + " |";
 
     // вычитаем 2й байт кириллицы и 2й и 3й байты сердечек для печати строки минусов
-    PrintNTimes('-', (*stateStr).length()-46);
+    PrintNTimes('-', (*stateStr).length()-58);
     // печать основного текста
     cout << endl << *stateStr << endl;
     // печать строки минусов
-    PrintNTimes('-', (*stateStr).length()-46);
+    PrintNTimes('-', (*stateStr).length()-58);
     cout << endl;
 
     delete[] buf;

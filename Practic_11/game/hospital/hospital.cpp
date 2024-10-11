@@ -10,7 +10,13 @@ bool Heal(int heartAmount) {
 	}
 	// считывание кэша за лечение
 	cash -= heartAmount*oneHeartPrice;
-	cout << "Проводится лечение. Списано " << heartAmount*oneHeartPrice << " кэша" << endl;
+	// считывание выносливости за лечение
+
+	// TODO: уменьшение выносливости на 10 за каждое восстановленное сердечко (heartAmount*10)
+
+	cout << "Проводится лечение..." << endl;
+	cout << "-" << heartAmount*oneHeartPrice << " кэша" << endl;
+	cout << "-" << heartAmount*10 << " выносливости" << endl;
 	// добавление сердечек
 	health += heartAmount;
 

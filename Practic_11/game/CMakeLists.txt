@@ -19,6 +19,7 @@ set(SOURCE_LIB
 	
 	./location/location.cpp
 	./hospital/hospital.cpp
+	./shop/shop.cpp
 	./office/office.cpp
 
 	./services/services.cpp

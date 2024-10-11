@@ -12,7 +12,7 @@ using namespace std;
 
 
 // список мест по возрастанию опасности
-string placesMap[10] = {
+string placesList[10] = {
     "Библиотека",
     "Больница",
     "Рынок",
@@ -107,7 +107,7 @@ void GetRandomCall(Call* emptyCall) {
 
     // получение случайного места
     string* randPlace = new string;
-    *randPlace = placesMap[Randint(0, 9)];
+    *randPlace = placesList[Randint(0, 9)];
 
     // получение случайного кол-ва людей
     int* randPeople = new int;
@@ -127,11 +127,11 @@ void GetRandomCall(Call* emptyCall) {
 
     // расчёт счёта за успешное выполнение задачи
     int* callScore = new int;
-    *callScore = (*callDanger) * (*randPeople) + Randint(0, 30);
+    *callScore = (*callDanger) * (*randPeople) + Randint(10, 40);
 
     // расчёт денег за успешное выполнение задачи
     int* callCash = new int;
-    *callCash = (*callDanger) + Randint(0, 20);
+    *callCash = (*callDanger) + Randint(10, 30);
 
     // расчёт времени на выполнение задачи
     float* callTimeDuration = new float;
