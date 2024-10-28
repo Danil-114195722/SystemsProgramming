@@ -22,6 +22,7 @@ set(SOURCE_LIB
 	./shop/shop.cpp
 	./office/office.cpp
 
+	./stamina/stamina.cpp
 	./services/services.cpp
 )
 

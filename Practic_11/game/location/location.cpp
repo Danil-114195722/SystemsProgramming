@@ -7,6 +7,7 @@
 #include "../hospital/hospital.h"
 #include "../shop/shop.h"
 #include "../office/office.h"
+#include "../stamina/stamina.h"
 
 #include "../main_vars/main_vars.h"
 #include "../main_vars/printing.h"
@@ -141,6 +142,7 @@ void CurrentLocation(Call* callList, int selectedCallIdx, Product* productList) 
 		}
 
 		cout << *lastActionIdx << ". Поехать в офис [o]" << endl;
+		cout << *lastActionIdx+1 << ". Поехать в магазин [m]" << endl;
 
 		delete lastActionIdx;
 	
@@ -154,6 +156,7 @@ void CurrentLocation(Call* callList, int selectedCallIdx, Product* productList) 
 			cout << " выносливости; -" << productList[i].cash << " кэша)" << endl;
 		}
 		cout << "4. Поехать в офис [o]" << endl;
+		cout << "5. Поехать в больницу [h]" << endl;
 	}
 	cout << endl;
 }
@@ -295,6 +298,11 @@ int MakeAction(Call* callList, int selectedCallIdx, Product* productList) {
 					location = "office";
 				// если неудача, то заканчиваем игру
 				} else {
+					// если при выполнении вызова закончилась выносливость
+					if (location == "hospital") {
+						return 0;
+					}
+
 					cout << "\nВы погибли при исполнении. Игра окончена. .  .    .       ." << endl << endl;
 					gameOver = true;
 				}
@@ -316,14 +324,56 @@ int MakeAction(Call* callList, int selectedCallIdx, Product* productList) {
 	} else if (location == "hospital") {
 		// переход в офис
 		if (action == 'o') {
+			// здесь будет true, если выносливость закончится
+			bool* isStaminaEmpty = new bool;
+
+			// уменьшение выносливости на 5
+			*isStaminaEmpty = SpendStamina(5);
+			// если выносливость на нуле
+			if (*isStaminaEmpty) {
+				RecoverStamina();
+				// если выносливость не восстановилась
+				if (gameOver) {
+					return 0;
+				}
+			} else {
+				// затраченное время на действие
+				age += 0.2;
+			}
+
 			cout << "Переход в: офис...\n" << endl;
 			location = "office";
-			// затраченное время на действие
-			age += 0.2;
+			delete isStaminaEmpty;
+
+		// переход в магазин
+		} else if (action == 'm') {
+			// здесь будет true, если выносливость закончится
+			bool* isStaminaEmpty = new bool;
+
+			// уменьшение выносливости на 5
+			*isStaminaEmpty = SpendStamina(5);
+			// если выносливость на нуле
+			if (*isStaminaEmpty) {
+				RecoverStamina();
+				// если выносливость не восстановилась
+				if (gameOver) {
+					return 0;
+				}
+			} else {
+				// затраченное время на действие
+				age += 0.1;
+			}
+
+			cout << "Переход в: магазин...\n" << endl;
+			location = "shop";
+			delete isStaminaEmpty;
+
 		} else {
 			// преобразование строки в число
 			int* chosenTreatment = new int;
 			*chosenTreatment = action - '0';
+			// здесь будет true, если выносливость закончится
+			bool* isStaminaEmpty = new bool;
 
 			// если был введён номер лечения (какое кол-во сердечек восстановить)
 			if (*chosenTreatment > 0 && *chosenTreatment <= maxHealth-health) {
@@ -333,9 +383,22 @@ int MakeAction(Call* callList, int selectedCallIdx, Product* productList) {
 					for (int i = 0; i < *chosenTreatment; ++i) {
 						cout << "♥";
 					}
-					cout << endl << endl;
-					// затраченное время на действие
-					age += 0.1 * (*chosenTreatment);
+					cout << endl;
+
+					// уменьшение выносливости на 10 за каждое восстановленное сердечко
+					*isStaminaEmpty = SpendStamina((*chosenTreatment) * 10);
+					cout << endl;
+					// если выносливость на нуле
+					if (*isStaminaEmpty) {
+						RecoverStamina();
+						// если выносливость не восстановилась
+						if (gameOver) {
+							return 0;
+						}
+					} else {
+						// затраченное время на действие
+						age += 0.1 * (*chosenTreatment);
+					}
 				} else {
 					cout << "Лечение не выполнено. Недостаточно кэша!\n" << endl;
 					// затраченное время на действие
@@ -347,8 +410,8 @@ int MakeAction(Call* callList, int selectedCallIdx, Product* productList) {
 				cout << "Введено неверное действие! Изменений не произошло.\n" << endl;
 			}
 
-			// TODO: уменьшение выносливости на 5
 			delete chosenTreatment;
+			delete isStaminaEmpty;
 		}
 
 	// магазин
@@ -359,6 +422,12 @@ int MakeAction(Call* callList, int selectedCallIdx, Product* productList) {
 			location = "office";
 			// затраченное время на действие
 			age += 0.3;
+		// переход в больницу
+		} else if (action == 'h') {
+			cout << "Переход в: больница...\n" << endl;
+			location = "hospital";
+			// затраченное время на действие
+			age += 0.1;
 		} else {
 			// преобразование строки в число
 			int* chosenProduct = new int;
