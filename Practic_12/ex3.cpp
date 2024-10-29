@@ -32,8 +32,8 @@ double Feed(Animal* animal, int days) {
 }
 // для статики
 double Feed(Animal animal, int days) {
-	animal->weight += 0.01 * days;
-	return animal->weight;
+	animal.weight += 0.01 * days;
+	return animal.weight;
 }
 
 // для динамики
@@ -43,7 +43,7 @@ std::string ChangeName(Animal* animal, std::string newName) {
 }
 // для статики
 std::string ChangeName(Animal animal, std::string newName) {
-	animal->name = newName;
+	animal.name = newName;
 	return newName;
 }
 
