@@ -5,18 +5,18 @@ struct Car {
 	std::string brend;
 	std::string color;
 	std::string bodyType;
-	float motorCapacity;
+	double motorCapacity;
 	int mileage;
 
 	void Print() {
 		std::cout << "Car: " << brend << " | Color: " << color;
 		std::cout << " | BodyType: " << bodyType << " | MotorCapacity: " << motorCapacity;
 		std::cout << " | Mileage: " << mileage << std::endl;
-	};
+	}
 
-	float AverageFuelConsumption() {
+	double AverageFuelConsumption() {
 		return motorCapacity / mileage * 100;
-	};
+	}
 
 	int DecreaseMileage(int amount) {
 		mileage -= amount;
@@ -24,20 +24,29 @@ struct Car {
 			mileage = 0;
 		}
 		return mileage;
-	};
+	}
 };
 
 
-float AverageFuelConsumption(Car car) {
+double AverageFuelConsumption(Car car) {
 	return car.motorCapacity / car.mileage * 100;
 }
 
+// для динамики
 int DecreaseMileage(Car* car, int amount) {
 	car->mileage -= amount;
 	if (car->mileage < 0) {
 		car->mileage = 0;
 	}
 	return car->mileage;
+}
+// для статики
+int DecreaseMileage(Car car, int amount) {
+	car.mileage -= amount;
+	if (car.mileage < 0) {
+		car.mileage = 0;
+	}
+	return car.mileage;
 }
 
 void PrintCar(Car car) {
@@ -64,7 +73,7 @@ int main() {
 
 	PrintCar(car1);
 	std::cout << "AverageFuelConsumption: " << AverageFuelConsumption(car1) << std::endl;
-	std::cout << "DecreaseMileage on " << *decreaseMileageAmount1 << " | New mileage: " << DecreaseMileage(&car1, *decreaseMileageAmount1) << std::endl;
+	std::cout << "DecreaseMileage on " << *decreaseMileageAmount1 << " | New mileage: " << DecreaseMileage(car1, *decreaseMileageAmount1) << std::endl;
 	car1.Print();
 	std::cout << "AverageFuelConsumption: " << car1.AverageFuelConsumption() << std::endl;
 	std::cout << "DecreaseMileage on " << *decreaseMileageAmount1 << " | New mileage: " << car1.DecreaseMileage(*decreaseMileageAmount1) << std::endl;
@@ -82,7 +91,7 @@ int main() {
 
 	PrintCar(car2);
 	std::cout << "AverageFuelConsumption: " << AverageFuelConsumption(car2) << std::endl;
-	std::cout << "DecreaseMileage on " << *decreaseMileageAmount2 << " | New mileage: " << DecreaseMileage(&car2, *decreaseMileageAmount2) << std::endl;
+	std::cout << "DecreaseMileage on " << *decreaseMileageAmount2 << " | New mileage: " << DecreaseMileage(car2, *decreaseMileageAmount2) << std::endl;
 	car2.Print();
 	std::cout << "AverageFuelConsumption: " << car2.AverageFuelConsumption() << std::endl;
 	std::cout << "DecreaseMileage on " << *decreaseMileageAmount2 << " | New mileage: " << car2.DecreaseMileage(*decreaseMileageAmount2) << std::endl;
@@ -100,7 +109,7 @@ int main() {
 
 	PrintCar(car3);
 	std::cout << "AverageFuelConsumption: " << AverageFuelConsumption(car3) << std::endl;
-	std::cout << "DecreaseMileage on " << *decreaseMileageAmount3 << " | New mileage: " << DecreaseMileage(&car3, *decreaseMileageAmount3) << std::endl;
+	std::cout << "DecreaseMileage on " << *decreaseMileageAmount3 << " | New mileage: " << DecreaseMileage(car3, *decreaseMileageAmount3) << std::endl;
 	car3.Print();
 	std::cout << "AverageFuelConsumption: " << car3.AverageFuelConsumption() << std::endl;
 	std::cout << "DecreaseMileage on " << *decreaseMileageAmount3 << " | New mileage: " << car3.DecreaseMileage(*decreaseMileageAmount3) << std::endl;

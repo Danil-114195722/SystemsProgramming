@@ -6,25 +6,25 @@ struct Human {
 	std::string first_name;
 	std::string last_name;
 	int age;
-	float weight;
-	float height;
+	double weight;
+	double height;
 
 	void print() {
 		std::cout << "Human: " << first_name << " " << last_name;
 		std::cout << " | Age: " << age << " | Weight: " << weight << " | height: " << height << std::endl;
-	};
+	}
 
-	float bodyWeightIndex() {
+	double bodyWeightIndex() {
 		return weight / (height * height);
-	};
+	}
 
 	int bornYear() {
 		return CURRENT_YEAR - age;
-	};
+	}
 };
 
 
-float BodyWeightIndex(Human human) {
+double BodyWeightIndex(Human human) {
 	return human.weight / (human.height * human.height);
 }
 

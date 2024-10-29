@@ -6,17 +6,17 @@ struct Animal {
 	std::string species;
 	std::string color;
 	int age;
-	float weight;
+	double weight;
 
 	void Print() {
 		std::cout << "Animal: " << name << " | Species: " << species;
 		std::cout << " | Color: " << color << " | Age: " << age << " | Weight: " << weight << std::endl;
-	};
+	}
 
-	float Feed(int days) {
+	double Feed(int days) {
 		weight += 0.01 * days;
 		return weight;
-	};
+	}
 
 	std::string ChangeName(std::string newName) {
 		name = newName;
@@ -25,12 +25,24 @@ struct Animal {
 };
 
 
-float Feed(Animal* animal, int days) {
+// для динамики
+double Feed(Animal* animal, int days) {
 	animal->weight += 0.01 * days;
 	return animal->weight;
-};
+}
+// для статики
+double Feed(Animal animal, int days) {
+	animal->weight += 0.01 * days;
+	return animal->weight;
+}
 
+// для динамики
 std::string ChangeName(Animal* animal, std::string newName) {
+	animal->name = newName;
+	return newName;
+}
+// для статики
+std::string ChangeName(Animal animal, std::string newName) {
 	animal->name = newName;
 	return newName;
 }
