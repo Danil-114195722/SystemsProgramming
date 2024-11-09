@@ -1,5 +1,6 @@
 #include <iostream>
 #include "Human.h"
+#include "enums.h"
 
 using namespace std;
 
@@ -115,6 +116,15 @@ int main() {
 	}
 
 	delete human6;
+
+	// enum и namespace
+	cout << endl << "*** enum и namespace ***" << endl << endl;
+
+	Human* kurt = new Human("Kurt", "Cobain", human::age::kurt);
+	Human* jimi = new Human("Jimi", "Hendrix", human::age::jimi);
+	Human* chester = new Human("Chester", "Benington", human::age::chester);
+
+	cout << endl << *kurt << *jimi << *chester << endl;
 
 	return 0;
 }

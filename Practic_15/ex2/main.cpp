@@ -1,5 +1,6 @@
 #include <iostream>
 #include "Car.h"
+#include "enums.h"
 
 using namespace std;
 
@@ -144,6 +145,16 @@ int main() {
 	delete decreaseMileageAmount1;
 	delete decreaseMileageAmount3;
 	delete decreaseMileageAmount6;
+
+	// enum и namespace
+	cout << endl << "*** enum и namespace ***" << endl << endl;
+
+	Car* lada = new Car("Lada", "white", "sedan", 1.5, car::mileage::lada);
+	Car* chevrolet = new Car("Chevrolet", "orange", "sedan", 4.6, car::mileage::chevrolet);
+	Car* chery = new Car("Chery", "red", "universal", 3.3, car::mileage::chery);
+
+	cout << endl << *lada << *chevrolet << *chery << endl;
+
 
 	return 0;
 }

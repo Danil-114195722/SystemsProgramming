@@ -1,7 +1,9 @@
 #include <iostream>
 #include "Animal.h"
+#include "enums.h"
 
 using namespace std;
+using namespace animal;
 
 
 int main() {
@@ -127,6 +129,16 @@ int main() {
 
 	delete days1;
 	delete newName1;
+
+	// enum и namespace
+	cout << endl << "*** enum и namespace ***" << endl << endl;
+
+	Animal* dogHuski = new Animal("AAAA", "dog", "lightgray", age::dogHuski);
+	Animal* dogAlabay = new Animal("BBBB", "dog", "white", age::dogAlabay);
+	Animal* dogShepherd = new Animal("CCCC", "dog", "brown", age::dogShepherd);
+
+	cout << endl << *dogHuski << *dogAlabay << *dogShepherd << endl;
+
 
 	return 0;
 }
