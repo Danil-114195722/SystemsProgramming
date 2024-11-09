@@ -140,5 +140,9 @@ int main() {
 	cout << endl << *dogHuski << *dogAlabay << *dogShepherd << endl;
 
 
+	delete dogHuski;
+	delete dogAlabay;
+	delete dogShepherd;
+
 	return 0;
 }

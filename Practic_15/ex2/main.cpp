@@ -155,6 +155,12 @@ int main() {
 
 	cout << endl << *lada << *chevrolet << *chery << endl;
 
+	lada->setMileage(car::mileage::chery);
+	cout << *lada;
+
+	delete lada;
+	delete chevrolet;
+	delete chery;
 
 	return 0;
 }

@@ -126,5 +126,9 @@ int main() {
 
 	cout << endl << *kurt << *jimi << *chester << endl;
 
+	delete kurt;
+	delete jimi;
+	delete chester;
+
 	return 0;
 }
