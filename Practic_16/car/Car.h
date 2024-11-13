@@ -8,11 +8,11 @@ class Car {
 	public:
 		// конструкторы
 		Car();
-		Car(string _brend, string _color, string _bodyType, double _motorCapacity, int _mileage);
-		Car(string _brend, string _color, string _bodyType, double _motorCapacity);
-		Car(string _brend, string _color, string _bodyType);
-		Car(string _brend, string _color);
-		Car(string _brend);
+		Car(string brend, string color, string bodyType, double motorCapacity, int mileage);
+		Car(string brend, string color, string bodyType, double motorCapacity);
+		Car(string brend, string color, string bodyType);
+		Car(string brend, string color);
+		Car(string brend);
 
 		// деструкторы
 		~Car();

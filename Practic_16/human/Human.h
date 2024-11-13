@@ -8,11 +8,11 @@ class Human {
 	public:
 		// конструкторы
 		Human();
-		Human(string _firstName, string _lastName, int _age, double _weight, double _height);
-		Human(string _firstName, string _lastName, int _age, double _weight);
-		Human(string _firstName, string _lastName, int _age);
-		Human(string _firstName, string _lastName);
-		Human(string _firstName);
+		Human(string firstName, string lastName, int age, double weight, double height);
+		Human(string firstName, string lastName, int age, double weight);
+		Human(string firstName, string lastName, int age);
+		Human(string firstName, string lastName);
+		Human(string firstName);
 
 		// деструкторы
 		~Human();
