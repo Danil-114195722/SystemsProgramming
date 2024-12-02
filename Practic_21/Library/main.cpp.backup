@@ -1,0 +1,131 @@
+#include <iostream>
+
+#include "./Library/Library.h"
+
+#include "./Persons/IPerson.h"
+#include "./Persons/Employee.h"
+#include "./Persons/Visitors/IVisitor.h"
+#include "./Persons/Visitors/Guest.h"
+#include "./Persons/Visitors/Client.h"
+
+#include "./Literature/ILiterature.h"
+#include "./Literature/Book.h"
+#include "./Literature/Newspaper.h"
+#include "./Literature/Magazine.h"
+
+
+int main() {
+	Employee* employee = new Employee("Ivan", "Kostolomov", 32, "security");
+	employee->print();
+
+	ILiterature* book1984 = new Book(1949, "England", "George Orwell", "1984", "dystopian");
+	book1984->print();
+	ILiterature* bookWoeFromMind = new Book(1838, "St.Peterburg", "Alexander Griboedov", "Woe From Mind", "comedy");
+	bookWoeFromMind->print();
+	ILiterature* bookEvgenyOnegin = new Book(1828, "St.Peterburg", "Alexander Pushkin", "Evgeny Onegin", "novel");
+	bookEvgenyOnegin->print();
+
+	Guest* guest = new Guest("Ivan", "Kruglov", 28, "+7(909)256-35-80", false);
+	guest->print();
+	guest->addLiteratureToRead(book1984);
+	guest->print();
+	guest->addLiteratureToRead(bookWoeFromMind);
+	guest->print();
+	guest->addLiteratureToRead(bookEvgenyOnegin);
+	guest->print();
+	guest->deleteLiteratureToRead(2);
+	guest->print();
+
+	cout << "Literature amount: " << guest->getLiteratureToReadSize() << endl;
+	ILiterature** temp = guest->getLiteratureToRead();
+	for(int i = 0; i < guest->getLiteratureToReadSize(); ++i) {
+		temp[i]->print();
+	}
+
+	cout << endl;
+
+	int booksAmount = 2;
+	ILiterature** books = new ILiterature*[booksAmount]{book1984, bookWoeFromMind};
+	for(int i = 0; i < booksAmount; ++i) {
+		books[i]->print();
+	}
+
+	Client* client1 = new Client("Dmitry", "Sedov", 43, "+7(901)346-86-29", true, "12345", books, booksAmount);
+	client1->print();
+	client1->addTakenLiterature(bookEvgenyOnegin);
+	client1->print();
+	client1->deleteTakenLiterature(0);
+	client1->print();
+
+	int newspaper1ThemesSize = 3;
+	string* newspaper1Themes = new string[newspaper1ThemesSize]{
+		"How to remove rectum?",
+		"Why you cannot sell one kidney and keep the second?",
+		"Great conspiracy"
+	};
+	ILiterature* newspaper1 = new Newspaper(2017, "St.Peterburg", newspaper1Themes, newspaper1ThemesSize);
+	newspaper1->print();
+
+	int magazine1ThemesSize = 2;
+	string* magazine1Themes = new string[magazine1ThemesSize]{
+		"Судоку",
+		"Это интересно",
+	};
+	ILiterature* magazine1 = new Magazine(2007, "ЗАО Редакция журнала Мурзилка", "РГДБ", "Мурзилка. 2007. № 01", magazine1Themes, magazine1ThemesSize);
+	magazine1->print();
+
+	Client* client2 = new Client("Maxim", "Pravy", 37, "+7(961)385-23-96", false, "12346");
+	client2->print();
+	client2->addTakenLiterature(bookEvgenyOnegin);
+	client2->addTakenLiterature(book1984);
+	client2->print();
+	client2->deleteTakenLiterature(0);
+	client2->print();
+	client2->addTakenLiterature(newspaper1);
+	client2->addTakenLiterature(bookWoeFromMind);
+	client2->print();
+	client2->addTakenLiterature(magazine1);
+	client2->print();
+
+	Library* publicLibrary = new Library("Public Library");
+	publicLibrary->print();
+	publicLibrary->addEmployee(employee);
+	publicLibrary->addClient(client2);
+	publicLibrary->addClient(client1);
+	publicLibrary->addGuest(guest);
+	publicLibrary->print();
+	publicLibrary->addLiterature(book1984);
+	publicLibrary->addLiterature(bookWoeFromMind);
+	publicLibrary->addLiterature(bookEvgenyOnegin);
+	publicLibrary->addLiterature(newspaper1);
+	publicLibrary->addLiterature(magazine1);
+	publicLibrary->print();
+
+	// печать всей литературы библиотеки
+	publicLibrary->printLiterature();
+	// печать всех работников библиотеки
+	publicLibrary->printEmployees();
+	// печать всех гостей библиотеки
+	publicLibrary->printGuests();
+	// печать всех клиентов библиотеки
+	publicLibrary->printClients();
+
+	publicLibrary->deleteLiterature(2);
+	publicLibrary->deleteClient(0);
+	publicLibrary->print();
+	
+	delete employee;
+	delete book1984;
+	delete bookWoeFromMind;
+	delete bookEvgenyOnegin;
+	delete[] books;
+	delete newspaper1;
+	delete magazine1;
+	delete guest;
+	delete client1;
+	delete client2;
+
+	delete publicLibrary;
+
+	return 0;
+}
