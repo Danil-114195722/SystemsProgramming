@@ -70,7 +70,6 @@ void initShoppingMall(ShoppingMall* shoppingMall, Inspector** inspectorList) {
 	shop3->addEmployee(employee31);
 	shop3->addClient(client31);
 
-
 	// этажи
 	Floor* floor0 = new Floor(0);
 	Floor* floor1 = new Floor(1);
@@ -96,7 +95,6 @@ int main() {
 	ShoppingMall* goldBabilon = new ShoppingMall("Gold Babilon");
 	initShoppingMall(goldBabilon, inspectorList);
 	goldBabilon->print();
-
 
 	for(int i = 0; i < 2; ++i) {
 		delete inspectorList[i];
